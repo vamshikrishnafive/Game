@@ -1,0 +1,96 @@
+<canvas id="gc" width="550" height="600" style="border:1px solid #000000";></canvas>
+<script>
+    window.onload=function() 
+    {
+        canv=document.getElementById("gc");
+        ctx=canv.getContext("2d");
+        document.addEventListener("keydown",keyPush);
+        setInterval(game,1000/15);	
+    }
+
+    playerx=playery=10;
+
+    spdX=spdY=20;  // speed x and speed y
+
+    ax=ay=15; // apple x and apple y
+
+    xv=yv=0; //  keybrod velocity 
+
+    trail=[];  //traill++
+
+    tail = 5; //defalut value
+
+    score = 0
+
+    function game() //main
+    {
+        playerx += xv; //player positioning
+        playery += yv;
+
+        if(playerx < 0) 
+        {
+            playerx = spdY-1;
+        }
+        if(playerx > spdY-1) 
+        {
+            playerx = 0;
+        }
+        if(playery < 0) 
+        {
+            playery = spdY-1;
+        }
+        if(playery > spdY-1) 
+        {
+            playery = 0;
+        }
+
+        score++; //score
+
+        ctx.fillStyle="green"; //background 
+        ctx.fillRect(0,0,canv.width,canv.height); //canvar box
+        
+        ctx.font = "30px Arial";
+     
+        ctx.fillStyle="black";  //snake code
+        for(var i=0;i<trail.length;i++) 
+        {
+            ctx.fillRect(trail[i].x*spdX,trail [i].y*spdX,spdX-2,spdX-2);
+            if(trail[i].x==playerx && trail[i].y==playery) 
+            {
+                tail = 5;
+            }
+        }
+        trail.push({x:playerx,y:playery});
+        while(trail.length>tail) {
+        trail.shift();
+        }
+     
+        if(ax == playerx && ay == playery) 
+        {
+            tail++;
+            ax=Math.floor(Math.random()*spdY);
+            ay=Math.floor(Math.random()*spdY);
+        }
+        ctx.fillStyle="red"; // points for snake
+        ctx.fillRect(ax*spdX,ay*spdX,spdX-2,spdX-2);
+        ctx.fillText("score:"+score,200,30); //displaying the score
+    }
+    function keyPush(evt) //keybord value
+    {
+        switch(evt.keyCode) 
+        {
+            case 37: //left arrow
+                xv=-1;yv=0;
+                break;
+            case 38: //up arrow
+                xv=0;yv=-1;
+                break;
+            case 39: //right arrow
+                xv=1;yv=0;
+                break;
+            case 40: //down arrow
+                xv=0;yv=1;
+                break;
+        }
+    }
+</script>
